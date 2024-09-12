@@ -2,6 +2,8 @@ from app.db.connections import Session
 from app.db.models import Category as CategoryModel
 from app.db.models import Product as ProductModel
 import pytest
+import pandas as pd
+import io
 
 @pytest.fixture()
 def db_session():
@@ -35,7 +37,7 @@ def categories_on_db(db_session):
 
 @pytest.fixture()
 def product_on_db(db_session):
-    category = CategoryModel(name="Carro", slug="carro")
+    category = CategoryModel(name="Roupa teste", slug="roupa-teste")
     db_session.add(category)
     db_session.commit()
 
@@ -55,3 +57,18 @@ def product_on_db(db_session):
     db_session.delete(product)
     db_session.delete(category)
     db_session.commit()
+
+@pytest.fixture()
+def product_on_csv_data():
+    data = {
+        "name": ["Acucar", "Feijao"],
+        "slug": ["acucar, feijao"],
+        "price": [19.99, 29.9],
+        "stock": [100, 150]
+    }
+
+    pd.DataFrame(data)
+    csv_buffer = io.to_csv(csv_buffer, index=False)
+    csv_buffer.seek(0)
+
+    return csv_buffer

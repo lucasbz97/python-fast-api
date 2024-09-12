@@ -8,6 +8,7 @@ services:
       - 8000:8000
     volumes: 
       - ./app:/app
+      - ~/.aws:/root/.aws:ro 
     command: sh -c "uvicorn main:app --host 0.0.0.0"
     depends_on:
       - postgresql

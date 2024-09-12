@@ -72,3 +72,20 @@ def test_update_product_invalid_id(db_session):
 
     with pytest.raises(HTTPException):
         uc.update_product(id=1, product=product)
+
+def test_proccess_csv_data(df, db_session):
+    uc = ProductUseCases(db_session=db_session)
+    
+    response = uc.proccess_csv_data(df=df, db_session=db_session)
+
+    products = db_session.query(ProductModel).all();
+
+    assert len(products) == 2
+
+def test_proccess_csv_data_invalid(df, db_session):
+    uc = ProductUseCases(db_session=db_session)
+    uc.proccess_csv_data(df=df, db_session=db_session)
+
+    products = db_session.query(ProductModel).all();
+
+    assert len(products) == 2
